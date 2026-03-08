@@ -1,0 +1,90 @@
+# TRaSH Guides Recyclarr Config
+# https://recyclarr.dev/wiki/yaml/config-reference/
+#
+# Install recyclarr:
+#   curl -fsSL https://github.com/recyclarr/recyclarr/releases/latest/download/recyclarr-linux-x64.tar.xz | tar xJ -C /usr/local/bin
+#
+# Run:
+#   recyclarr sync --config /opt/arr-stack/recyclarr/recyclarr.yml
+#
+# Replace api_key values with your actual keys from each app's config.xml
+
+radarr:
+  movies:
+    base_url: http://localhost:7878
+    api_key: YOUR_RADARR_API_KEY
+
+    quality_definition:
+      type: movie
+
+    quality_profiles:
+      - trash_id: d1d67249d3890e49bc12e275d989a7e9  # HD Bluray + WEB
+        reset_unmatched_scores:
+          enabled: true
+
+    custom_format_groups:
+      add:
+        - trash_id: f8bf8eab4617f12dfdbd16303d8da245  # [Required] Golden Rule HD
+          select_all: true
+          assign_scores_to:
+            - name: HD Bluray + WEB
+
+        - trash_id: f4f1474b963b24cf983455743aa9906c  # [Optional] Movie Versions
+          select_all: true
+          assign_scores_to:
+            - name: HD Bluray + WEB
+
+        - trash_id: 9337080378236ce4c0b183e35790d2a7  # [Optional] Miscellaneous
+          select_all: true
+          assign_scores_to:
+            - name: HD Bluray + WEB
+
+        - trash_id: d9cc9a504e5ede6294c8b973aad4f028  # [Streaming Services] General
+          select_all: true
+          assign_scores_to:
+            - name: HD Bluray + WEB
+
+    media_naming:
+      folder: jellyfin-tmdb
+      movie:
+        rename: true
+        standard: jellyfin-tmdb
+
+sonarr:
+  series:
+    base_url: http://localhost:8989
+    api_key: YOUR_SONARR_API_KEY
+
+    quality_definition:
+      type: series
+
+    quality_profiles:
+      - trash_id: 72dae194fc92bf828f32cde7744e51a1  # WEB-1080p
+        reset_unmatched_scores:
+          enabled: true
+
+    custom_format_groups:
+      add:
+        - trash_id: 158188097a58d7687dee647e04af0da3  # [Required] Golden Rule HD
+          select_all: true
+          assign_scores_to:
+            - name: WEB-1080p
+
+        - trash_id: f4a0410a1df109a66d6e47dcadcce014  # [Optional] Miscellaneous
+          select_all: true
+          assign_scores_to:
+            - name: WEB-1080p
+
+        - trash_id: abe720fab2d27682adc2a735136cec02  # [Streaming Services] General
+          select_all: true
+          assign_scores_to:
+            - name: WEB-1080p
+
+    media_naming:
+      series: jellyfin-tvdb
+      season: default
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
