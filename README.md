@@ -135,6 +135,36 @@ All exposed via Netbird reverse proxy with auto-TLS and bearer auth (OIDC/SSO).
 incus exec arr-stack -- recyclarr sync --config /opt/arr-stack/recyclarr/recyclarr.yml
 ```
 
+## Network
+
+### NICs
+
+| NIC | IP | Speed | Role |
+|---|---|---|---|
+| `eno1` | 192.168.1.205 | 1 Gbps | Fallback (metric 200) |
+| `enp1s0` | 192.168.1.97 | 2.5 Gbps | Default route (metric 50) |
+
+### Internet Speed (Ookla)
+
+| NIC | Download | Upload | Ping |
+|---|---|---|---|
+| eno1 (1G) | 936 Mbps | 935 Mbps | 0.8 ms |
+| enp1s0 (2.5G) | 934 Mbps | 936 Mbps | 0.9 ms |
+
+ISP caps at ~936 Mbps — both NICs saturate the link equally.
+
+### LAN Benchmarks (iperf3)
+
+| Client | → eno1 (1G) | → enp1s0 (2.5G) |
+|---|---|---|
+| MacBook Air M2 (WiFi 6) | 383 Mbps | 431 Mbps |
+| iPad M2 (WiFi 6) download | 410 Mbps | 318 Mbps |
+| iPad M2 (WiFi 6) upload | 532 Mbps | 525 Mbps |
+| Pixel 7 (WiFi 6) | 846 Mbps | 866 Mbps |
+| Mac via Netbird tunnel | — | 435 Mbps |
+
+**Conclusion:** WiFi is the bottleneck for all wireless clients (~400-530 Mbps on Mac/iPad, ~850 Mbps on Pixel 7). The 2.5G NIC advantage only shows on wired connections or with WiFi 6E/7 clients.
+
 ## Prowlarr Proxy (ISP DPI Bypass)
 
 Tinyproxy on hydra VPS bypasses ISP deep packet inspection for indexer requests. Configure in Prowlarr: Settings > General > Proxy → `http://<hydra-netbird-ip>:8888`.
